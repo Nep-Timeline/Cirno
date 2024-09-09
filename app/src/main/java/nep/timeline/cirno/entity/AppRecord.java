@@ -26,6 +26,10 @@ public class AppRecord {
         this.appState = new AppState(this);
     }
 
+    public boolean isSystem() {
+        return packageName == null || packageName.equals("android") || PKGUtils.isSystemApp(applicationInfo);
+    }
+
     public void reset() {
         this.frozen = false;
         this.appState = new AppState(this);
