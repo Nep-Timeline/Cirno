@@ -1,2 +1,2 @@
-# Freezer-Lite
-New android tombstone module
+# Freezer Lite
+Freezer lite is a free and open-source android tombstone module
