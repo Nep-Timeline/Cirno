@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">Cirno</string>
+    <string name="package_name" translatable="false">nep.timeline.cirno</string>
+    <string name="app_description">Third-party Android Freezer, Frozen applications in the background to improve device smoothness</string>
+</resources>
