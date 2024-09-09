@@ -32,6 +32,10 @@ public class ProcessRecord {
         return (int) XposedHelpers.getObjectField(instance, "pid");
     }
 
+    public boolean isDeathProcess() {
+        return getPid() <= 0;
+    }
+
     public AppRecord getAppRecord() {
         if (appRecord == null)
             appRecord = AppService.get(packageName, userId);
