@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId 'nep.timeline.cirno'
-        minSdk 28
+        minSdk 31
         targetSdk 35
         versionCode 1
         versionName 'Lite'
