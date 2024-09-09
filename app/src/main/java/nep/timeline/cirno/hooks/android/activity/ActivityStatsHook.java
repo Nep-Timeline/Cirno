@@ -12,6 +12,9 @@ import nep.timeline.cirno.entity.ActivityRecord;
 import nep.timeline.cirno.entity.AppRecord;
 import nep.timeline.cirno.framework.AbstractMethodHook;
 import nep.timeline.cirno.framework.MethodHook;
+import nep.timeline.cirno.log.Log;
+import nep.timeline.cirno.services.FreezerService;
+import nep.timeline.cirno.threads.FreezerHandler;
 
 public class ActivityStatsHook extends MethodHook {
     private final Map<IBinder, ActivityRecord> activityRecords = new ConcurrentHashMap<>();
@@ -62,6 +65,20 @@ public class ActivityStatsHook extends MethodHook {
                 if (appRecord == null)
                     return;
 
+                if (event == UsageEvents.Event.ACTIVITY_RESUMED)
+                    appRecord.getAppState().getActivities().add(activityRecord.getToken());
+                else
+                    appRecord.getAppState().getActivities().remove(activityRecord.getToken());
+
+                if (appRecord.getAppState().getActivities().isEmpty()) {
+                    if (appRecord.getAppState().setVisible(false)) {
+                        Log.d(appRecord.getPackageNameWithUser() + " 进入后台");
+                        FreezerHandler.sendFreezeMessage(appRecord, 3000);
+                    }
+                } else if (appRecord.getAppState().setVisible(true)) {
+                    Log.d(appRecord.getPackageNameWithUser() + " 进入前台");
+                    FreezerService.thaw(appRecord);
+                }
             }
         };
     }

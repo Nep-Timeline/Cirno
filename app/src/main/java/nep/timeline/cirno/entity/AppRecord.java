@@ -30,6 +30,12 @@ public class AppRecord {
         return packageName == null || packageName.equals("android") || PKGUtils.isSystemApp(applicationInfo);
     }
 
+    public String getPackageNameWithUser() {
+        if (userId == 0)
+            return packageName;
+        return packageName + ":" + userId;
+    }
+
     public void reset() {
         this.frozen = false;
         this.appState = new AppState(this);

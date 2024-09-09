@@ -3,7 +3,9 @@ package nep.timeline.cirno.entity;
 import android.content.pm.ApplicationInfo;
 
 import de.robv.android.xposed.XposedHelpers;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import nep.timeline.cirno.services.AppService;
 
 @Getter
@@ -15,7 +17,10 @@ public class ProcessRecord {
     private final int uid;
     private final String packageName;
     private final String processName;
+    @Getter(AccessLevel.NONE)
     private AppRecord appRecord;
+    @Setter
+    private boolean frozen;
 
     public ProcessRecord(Object instance) {
         this.instance = instance;

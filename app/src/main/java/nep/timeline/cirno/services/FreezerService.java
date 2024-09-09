@@ -1,15 +1,34 @@
 package nep.timeline.cirno.services;
 
-import nep.timeline.cirno.utils.RWUtils;
+import nep.timeline.cirno.entity.AppRecord;
+import nep.timeline.cirno.entity.ProcessRecord;
+import nep.timeline.cirno.utils.FrozenRW;
 
 public class FreezerService {
-    public static final String cgroupV2 = "/sys/fs/cgroup/";
+    public static void freezer(AppRecord appRecord) {
+        if (appRecord.isFrozen() || appRecord.isSystem() || appRecord.getAppState().isVisible())
+            return;
 
-    public static void frozen(int uid, int pid) {
-        RWUtils.writeFrozen(cgroupV2 + "/uid_" + uid + "/pid_" + pid + "/cgroup.freeze", 1);
+        for (ProcessRecord processRecord : appRecord.getProcessRecords()) {
+            if (processRecord.isDeathProcess() || processRecord.isFrozen())
+                continue;
+
+            FrozenRW.frozen(processRecord.getRunningUid(), processRecord.getPid());
+            processRecord.setFrozen(true);
+        }
     }
 
-    public static void thaw(int uid, int pid) {
-        RWUtils.writeFrozen(cgroupV2 + "/uid_" + uid + "/pid_" + pid + "/cgroup.freeze", 0);
+
+    public static void thaw(AppRecord appRecord) {
+        if (!appRecord.isFrozen() || appRecord.isSystem())
+            return;
+
+        for (ProcessRecord processRecord : appRecord.getProcessRecords()) {
+            if (processRecord.isDeathProcess() || !processRecord.isFrozen())
+                continue;
+
+            FrozenRW.thaw(processRecord.getRunningUid(), processRecord.getPid());
+            processRecord.setFrozen(false);
+        }
     }
 }
