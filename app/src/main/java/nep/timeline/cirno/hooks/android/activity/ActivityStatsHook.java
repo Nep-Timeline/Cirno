@@ -36,7 +36,7 @@ public class ActivityStatsHook extends MethodHook {
 
     @Override
     public Object[] getTargetParam() {
-        return new Object[] { "com.android.server.am.ActivityRecord", int.class };
+        return new Object[] { "com.android.server.wm.ActivityRecord", int.class };
     }
 
     @Override

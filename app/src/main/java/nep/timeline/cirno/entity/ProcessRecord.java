@@ -34,7 +34,7 @@ public class ProcessRecord {
     }
 
     public int getPid() {
-        return (int) XposedHelpers.getObjectField(instance, "pid");
+        return (int) XposedHelpers.getObjectField(instance, "mPid");
     }
 
     public boolean isDeathProcess() {
