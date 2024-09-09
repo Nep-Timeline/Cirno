@@ -29,4 +29,14 @@ public class ActivityManagerService {
         }
         return null;
     }
+
+    public static String[] getPackagesForUid(int uid) {
+        Context context = getContext();
+
+        if (context == null)
+            return null;
+
+        PackageManager packageManager = context.getPackageManager();
+        return packageManager.getPackagesForUid(uid);
+    }
 }

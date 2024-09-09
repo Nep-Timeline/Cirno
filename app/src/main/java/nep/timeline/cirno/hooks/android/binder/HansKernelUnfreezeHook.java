@@ -3,6 +3,7 @@ package nep.timeline.cirno.hooks.android.binder;
 import de.robv.android.xposed.XC_MethodHook;
 import nep.timeline.cirno.framework.AbstractMethodHook;
 import nep.timeline.cirno.framework.MethodHook;
+import nep.timeline.cirno.services.FreezerService;
 import nep.timeline.cirno.utils.SystemChecker;
 
 public class HansKernelUnfreezeHook extends MethodHook {
@@ -34,6 +35,8 @@ public class HansKernelUnfreezeHook extends MethodHook {
                 if (type != 1) // Sync binder
                     return;
                 int target = (int) param.args[4];
+
+                FreezerService.temporaryUnfreezeIfNeed(target, "Binder", 3000);
             }
         };
     }

@@ -3,6 +3,7 @@ package nep.timeline.cirno.hooks.android.binder;
 import de.robv.android.xposed.XC_MethodHook;
 import nep.timeline.cirno.framework.AbstractMethodHook;
 import nep.timeline.cirno.framework.MethodHook;
+import nep.timeline.cirno.services.FreezerService;
 import nep.timeline.cirno.utils.SystemChecker;
 
 public class MilletBinderTransHook extends MethodHook {
@@ -35,6 +36,8 @@ public class MilletBinderTransHook extends MethodHook {
                     return;
 
                 int dstUid = (int) param.args[0];
+
+                FreezerService.temporaryUnfreezeIfNeed(dstUid, "Binder", 3000);
             }
         };
     }

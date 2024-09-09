@@ -5,6 +5,7 @@ import android.os.Build;
 import de.robv.android.xposed.XC_MethodHook;
 import nep.timeline.cirno.framework.AbstractMethodHook;
 import nep.timeline.cirno.framework.MethodHook;
+import nep.timeline.cirno.services.FreezerService;
 import nep.timeline.cirno.utils.SystemChecker;
 
 public class SamsungBinderTransHook extends MethodHook {
@@ -38,6 +39,8 @@ public class SamsungBinderTransHook extends MethodHook {
                 if (flags == 1) // Async binder
                     return;
                 int uid = (int) param.args[1];
+
+                FreezerService.temporaryUnfreezeIfNeed(uid, "Binder", 3000);
             }
         };
     }
