@@ -2,6 +2,9 @@ package nep.timeline.cirno.entity;
 
 import android.content.pm.ApplicationInfo;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 import lombok.Data;
 import nep.timeline.cirno.utils.PKGUtils;
 
@@ -13,6 +16,7 @@ public class AppRecord {
     private final ApplicationInfo applicationInfo;
     private AppState appState;
     private boolean frozen;
+    private final List<ProcessRecord> processRecords = new CopyOnWriteArrayList<>();
 
     public AppRecord(ApplicationInfo applicationInfo) {
         this.packageName = applicationInfo.packageName;
