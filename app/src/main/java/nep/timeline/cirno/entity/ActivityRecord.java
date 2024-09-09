@@ -16,7 +16,7 @@ public class ActivityRecord {
     public ActivityRecord(Object instance) {
         this.instance = instance;
         this.packageName = (String) XposedHelpers.getObjectField(instance, "packageName");
-        this.userId = XposedHelpers.getIntField(instance, "userId");
+        this.userId = XposedHelpers.getIntField(instance, "mUserId");
         this.token = (IBinder) XposedHelpers.getObjectField(instance, "token");
     }
 
