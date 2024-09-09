@@ -2,6 +2,7 @@ package nep.timeline.cirno.services;
 
 import nep.timeline.cirno.entity.AppRecord;
 import nep.timeline.cirno.entity.ProcessRecord;
+import nep.timeline.cirno.threads.FreezerHandler;
 import nep.timeline.cirno.utils.FrozenRW;
 
 public class FreezerService {
@@ -20,6 +21,8 @@ public class FreezerService {
 
 
     public static void thaw(AppRecord appRecord) {
+        FreezerHandler.removeAppMessage(appRecord);
+
         if (!appRecord.isFrozen() || appRecord.isSystem())
             return;
 
