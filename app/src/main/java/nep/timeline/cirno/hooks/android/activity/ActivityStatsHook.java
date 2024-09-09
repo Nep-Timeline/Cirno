@@ -61,7 +61,7 @@ public class ActivityStatsHook extends MethodHook {
 
                 if (appRecord == null)
                     return;
-                
+
             }
         };
     }
