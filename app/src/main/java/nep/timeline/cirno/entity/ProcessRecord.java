@@ -28,6 +28,10 @@ public class ProcessRecord {
         this.appRecord = AppService.get(packageName, userId);
     }
 
+    public int getPid() {
+        return (int) XposedHelpers.getObjectField(instance, "pid");
+    }
+
     public AppRecord getAppRecord() {
         if (appRecord == null)
             appRecord = AppService.get(packageName, userId);
