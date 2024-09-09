@@ -20,6 +20,8 @@ public class FreezerService {
             FrozenRW.frozen(processRecord.getRunningUid(), processRecord.getPid());
             processRecord.setFrozen(true);
         }
+
+        appRecord.setFrozen(true);
     }
 
 
@@ -36,6 +38,8 @@ public class FreezerService {
             FrozenRW.thaw(processRecord.getRunningUid(), processRecord.getPid());
             processRecord.setFrozen(false);
         }
+
+        appRecord.setFrozen(false);
     }
 
     public static void temporaryUnfreezeIfNeed(int uid, String reason, long interval) {

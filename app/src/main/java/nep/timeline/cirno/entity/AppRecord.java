@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import lombok.Data;
+import nep.timeline.cirno.CommonConstants;
 import nep.timeline.cirno.utils.PKGUtils;
 
 @Data
@@ -27,7 +28,7 @@ public class AppRecord {
     }
 
     public boolean isSystem() {
-        return packageName == null || packageName.equals("android") || PKGUtils.isSystemApp(applicationInfo);
+        return packageName == null || PKGUtils.isSystemApp(applicationInfo) || CommonConstants.isWhitelistApps(packageName);
     }
 
     public String getPackageNameWithUser() {
