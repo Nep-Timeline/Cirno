@@ -29,10 +29,9 @@ public class ProcessRemoveHook extends MethodHook {
         return new AbstractMethodHook() {
             @Override
             protected void afterMethod(MethodHookParam param) {
-                Object record = param.args[0];
-                if (record == null)
-                    return;
-                ProcessService.removeProcessRecord(record);
+                String name = (String) param.args[0];
+                int uid = (int) param.args[1];
+                ProcessService.removeProcessRecord(name, uid);
             }
         };
     }

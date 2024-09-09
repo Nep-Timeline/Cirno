@@ -9,7 +9,7 @@ public class ProcessService {
         }
     }
 
-    public static void removeProcessRecord(Object record) {
+    public static void removeProcessRecord(String name, int uid) {
         synchronized (lock) {
 
         }
