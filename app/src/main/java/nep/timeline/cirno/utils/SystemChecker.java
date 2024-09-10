@@ -17,4 +17,9 @@ public class SystemChecker {
     {
         return XposedHelpers.findClassIfExists("com.android.server.am.OplusHansManager", classLoader) != null;
     }
+
+    public static boolean isHuawei(ClassLoader classLoader)
+    {
+        return XposedHelpers.findClassIfExists("com.huawei.turbozone.ITurboService", classLoader) != null;
+    }
 }

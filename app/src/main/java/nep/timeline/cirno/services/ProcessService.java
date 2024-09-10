@@ -36,4 +36,20 @@ public class ProcessService {
             }
         }
     }
+
+    public static ProcessRecord getProcessRecord(Object record) {
+        if (record == null)
+            return null;
+        ProcessRecord processRecord = new ProcessRecord(record);
+        return getProcessRecord(processRecord.getProcessName(), processRecord.getRunningUid());
+    }
+
+    public static ProcessRecord getProcessRecord(String processName, int uid) {
+        if (processName == null || processName.isEmpty())
+            return null;
+        Map<Integer, ProcessRecord> map = PROCESS_NAME_MAP.get(processName);
+        if (map == null)
+            return null;
+        return map.get(uid);
+    }
 }
