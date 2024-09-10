@@ -10,6 +10,7 @@ import nep.timeline.cirno.hooks.android.binder.MilletBinderTransHook;
 import nep.timeline.cirno.hooks.android.binder.SamsungBinderTransHook;
 import nep.timeline.cirno.hooks.android.process.ProcessAddHook;
 import nep.timeline.cirno.hooks.android.process.ProcessRemoveHook;
+import nep.timeline.cirno.hooks.android.wakelock.WakeLockHook;
 
 public class AndroidHooks {
     public static void start(ClassLoader classLoader) {
@@ -17,6 +18,8 @@ public class AndroidHooks {
         FileObserver fileObserver = new ConfigFileObserver();
         fileObserver.startWatching();
 
+        // WakeLock
+        new WakeLockHook(classLoader);
         // Activity
         new ActivityManagerServiceHook(classLoader);
         new ActivityStatsHook(classLoader);
