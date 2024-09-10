@@ -12,6 +12,7 @@ import nep.timeline.cirno.log.Log;
 public abstract class MethodHook {
     public final int ANY_VERSION = -1;
     public final ClassLoader classLoader;
+    private XC_MethodHook.Unhook unhook = null;
 
     public MethodHook(ClassLoader classLoader) {
         this.classLoader = classLoader;
@@ -54,10 +55,18 @@ public abstract class MethodHook {
             ArrayList<Object> param = new ArrayList<>(Arrays.asList(targetParam));
             param.add(targetHook);
             if (targetMethod == null)
-                XposedHelpers.findAndHookConstructor(targetClass, classLoader, param.toArray());
+                unhook = XposedHelpers.findAndHookConstructor(targetClass, classLoader, param.toArray());
             else
-                XposedHelpers.findAndHookMethod(targetClass, classLoader, targetMethod, param.toArray());
+                unhook = XposedHelpers.findAndHookMethod(targetClass, classLoader, targetMethod, param.toArray());
             Log.i(getTargetMethod() + " -> 成功Hook完毕!");
         }
+    }
+
+    public void unhook() {
+        if (unhook == null)
+            return;
+
+        unhook.unhook();
+        unhook = null;
     }
 }

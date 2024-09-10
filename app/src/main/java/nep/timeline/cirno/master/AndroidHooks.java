@@ -12,6 +12,7 @@ import nep.timeline.cirno.hooks.android.broadcast.BroadcastDeliveryHook;
 import nep.timeline.cirno.hooks.android.process.ProcessAddHook;
 import nep.timeline.cirno.hooks.android.process.ProcessRemoveHook;
 import nep.timeline.cirno.hooks.android.wakelock.WakeLockHook;
+import nep.timeline.cirno.services.BinderService;
 
 public class AndroidHooks {
     public static void start(ClassLoader classLoader) {
@@ -33,5 +34,7 @@ public class AndroidHooks {
         new HansKernelUnfreezeHook(classLoader);
         new MilletBinderTransHook(classLoader);
         new SamsungBinderTransHook(classLoader);
+        // ReKernel
+        BinderService.start(classLoader);
     }
 }

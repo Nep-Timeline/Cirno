@@ -5,6 +5,7 @@ import android.os.Build;
 import de.robv.android.xposed.XC_MethodHook;
 import nep.timeline.cirno.framework.AbstractMethodHook;
 import nep.timeline.cirno.framework.MethodHook;
+import nep.timeline.cirno.services.BinderService;
 import nep.timeline.cirno.services.FreezerService;
 import nep.timeline.cirno.utils.SystemChecker;
 
@@ -35,6 +36,11 @@ public class SamsungBinderTransHook extends MethodHook {
         return new AbstractMethodHook() {
             @Override
             protected void beforeMethod(MethodHookParam param) {
+                if (BinderService.received) {
+                    unhook();
+                    return;
+                }
+                
                 int flags = (int) param.args[Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU ? 5 : 4];
                 if (flags == 1) // Async binder
                     return;
