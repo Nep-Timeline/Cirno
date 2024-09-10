@@ -7,7 +7,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import lombok.Data;
 import nep.timeline.cirno.CommonConstants;
+import nep.timeline.cirno.configs.checkers.AppConfigs;
 import nep.timeline.cirno.utils.PKGUtils;
+import nep.timeline.cirno.virtuals.ProcessRecord;
 
 @Data
 public class AppRecord {
@@ -28,7 +30,7 @@ public class AppRecord {
     }
 
     public boolean isSystem() {
-        return packageName == null || PKGUtils.isSystemApp(applicationInfo) || CommonConstants.isWhitelistApps(packageName);
+        return packageName == null || PKGUtils.isSystemApp(applicationInfo) || AppConfigs.isWhiteApp(packageName, userId) || CommonConstants.isWhitelistApps(packageName);
     }
 
     public String getPackageNameWithUser() {

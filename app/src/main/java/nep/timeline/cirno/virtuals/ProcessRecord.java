@@ -1,4 +1,4 @@
-package nep.timeline.cirno.entity;
+package nep.timeline.cirno.virtuals;
 
 import android.content.pm.ApplicationInfo;
 
@@ -6,6 +6,7 @@ import de.robv.android.xposed.XposedHelpers;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import nep.timeline.cirno.entity.AppRecord;
 import nep.timeline.cirno.services.AppService;
 
 @Getter

@@ -3,7 +3,7 @@ package nep.timeline.cirno.services;
 import java.util.List;
 
 import nep.timeline.cirno.entity.AppRecord;
-import nep.timeline.cirno.entity.ProcessRecord;
+import nep.timeline.cirno.virtuals.ProcessRecord;
 import nep.timeline.cirno.log.Log;
 import nep.timeline.cirno.threads.FreezerHandler;
 import nep.timeline.cirno.utils.FrozenRW;

@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import nep.timeline.cirno.entity.AppRecord;
-import nep.timeline.cirno.entity.ProcessRecord;
+import nep.timeline.cirno.virtuals.ProcessRecord;
 
 public class ProcessService {
     private static final Map<String, Map<Integer, ProcessRecord>> PROCESS_NAME_MAP = new ConcurrentHashMap<>();

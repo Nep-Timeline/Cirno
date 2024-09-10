@@ -1,9 +1,10 @@
-package nep.timeline.cirno.entity;
+package nep.timeline.cirno.virtuals;
 
 import android.os.IBinder;
 
 import de.robv.android.xposed.XposedHelpers;
 import lombok.Getter;
+import nep.timeline.cirno.entity.AppRecord;
 import nep.timeline.cirno.services.AppService;
 
 @Getter

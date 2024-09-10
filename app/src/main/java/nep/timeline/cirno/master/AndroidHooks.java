@@ -1,5 +1,8 @@
 package nep.timeline.cirno.master;
 
+import android.os.FileObserver;
+
+import nep.timeline.cirno.configs.ConfigFileObserver;
 import nep.timeline.cirno.hooks.android.activity.ActivityManagerServiceHook;
 import nep.timeline.cirno.hooks.android.activity.ActivityStatsHook;
 import nep.timeline.cirno.hooks.android.binder.HansKernelUnfreezeHook;
@@ -10,6 +13,10 @@ import nep.timeline.cirno.hooks.android.process.ProcessRemoveHook;
 
 public class AndroidHooks {
     public static void start(ClassLoader classLoader) {
+        // Config
+        FileObserver fileObserver = new ConfigFileObserver();
+        fileObserver.startWatching();
+
         // Activity
         new ActivityManagerServiceHook(classLoader);
         new ActivityStatsHook(classLoader);

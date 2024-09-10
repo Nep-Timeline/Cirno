@@ -10,6 +10,7 @@ import nep.timeline.cirno.log.Log;
 
 public class Handlers {
     public static final Handler log = makeHandlerBackground("Log");
+    public static final Handler config = makeHandlerBackground("Config");
 
     public static Handler makeHandlerForeground(String str) {
         return makeHandlerForeground(str, false);
