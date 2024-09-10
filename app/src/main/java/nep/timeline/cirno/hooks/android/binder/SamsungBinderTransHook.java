@@ -40,7 +40,7 @@ public class SamsungBinderTransHook extends MethodHook {
                     unhook();
                     return;
                 }
-                
+
                 int flags = (int) param.args[Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU ? 5 : 4];
                 if (flags == 1) // Async binder
                     return;

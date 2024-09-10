@@ -5,6 +5,7 @@ import android.os.FileObserver;
 import nep.timeline.cirno.configs.ConfigFileObserver;
 import nep.timeline.cirno.hooks.android.activity.ActivityManagerServiceHook;
 import nep.timeline.cirno.hooks.android.activity.ActivityStatsHook;
+import nep.timeline.cirno.hooks.android.alarms.AlarmManagerService;
 import nep.timeline.cirno.hooks.android.binder.HansKernelUnfreezeHook;
 import nep.timeline.cirno.hooks.android.binder.MilletBinderTransHook;
 import nep.timeline.cirno.hooks.android.binder.SamsungBinderTransHook;
@@ -20,6 +21,8 @@ public class AndroidHooks {
         FileObserver fileObserver = new ConfigFileObserver();
         fileObserver.startWatching();
 
+        // Alarms
+        new AlarmManagerService(classLoader);
         // Broadcast
         new BroadcastDeliveryHook(classLoader);
         // WakeLock
