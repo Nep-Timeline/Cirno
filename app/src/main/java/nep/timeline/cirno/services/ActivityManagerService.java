@@ -30,6 +30,10 @@ public class ActivityManagerService {
         return null;
     }
 
+    public static int getCurrentOrTargetUserId() {
+        return (int) XposedHelpers.callMethod(XposedHelpers.getObjectField(instance, "mUserController"), "getCurrentOrTargetUserId");
+    }
+
     public static String[] getPackagesForUid(int uid) {
         Context context = getContext();
 

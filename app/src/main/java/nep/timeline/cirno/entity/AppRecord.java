@@ -8,6 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import lombok.Data;
 import nep.timeline.cirno.CommonConstants;
 import nep.timeline.cirno.configs.checkers.AppConfigs;
+import nep.timeline.cirno.utils.InputMethodData;
 import nep.timeline.cirno.utils.PKGUtils;
 import nep.timeline.cirno.virtuals.ProcessRecord;
 
@@ -30,7 +31,7 @@ public class AppRecord {
     }
 
     public boolean isSystem() {
-        return packageName == null || PKGUtils.isSystemApp(applicationInfo) || AppConfigs.isWhiteApp(packageName, userId) || CommonConstants.isWhitelistApps(packageName);
+        return packageName == null || equals(InputMethodData.currentInputMethodApp) || PKGUtils.isSystemApp(applicationInfo) || AppConfigs.isWhiteApp(packageName, userId) || CommonConstants.isWhitelistApps(packageName);
     }
 
     public String getPackageNameWithUser() {
@@ -42,5 +43,16 @@ public class AppRecord {
     public void reset() {
         this.frozen = false;
         this.appState = new AppState(this);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (obj == this)
+            return true;
+        if (obj instanceof AppRecord appRecord)
+            return getUserId() == appRecord.getUserId() && getPackageName().equals(appRecord.getPackageName());
+        return false;
     }
 }
