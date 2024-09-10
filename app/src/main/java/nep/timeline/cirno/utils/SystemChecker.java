@@ -22,4 +22,9 @@ public class SystemChecker {
     {
         return XposedHelpers.findClassIfExists("com.huawei.turbozone.ITurboService", classLoader) != null;
     }
+
+    public static boolean isVivo(ClassLoader classLoader)
+    {
+        return XposedHelpers.findClassIfExists("com.android.server.am.IVivoBroadcastQueueModern", classLoader) != null;
+    }
 }
