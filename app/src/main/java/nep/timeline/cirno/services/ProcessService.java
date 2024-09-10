@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import nep.timeline.cirno.entity.AppRecord;
+import nep.timeline.cirno.threads.FreezerHandler;
+import nep.timeline.cirno.utils.FrozenRW;
 import nep.timeline.cirno.virtuals.ProcessRecord;
 
 public class ProcessService {
@@ -15,10 +17,13 @@ public class ProcessService {
         AppRecord appRecord = processRecord.getAppRecord();
         if (appRecord == null)
             return;
+
         synchronized (lock) {
             PROCESS_NAME_MAP.computeIfAbsent(processRecord.getProcessName(), k -> new ConcurrentHashMap<>()).put(processRecord.getRunningUid(), processRecord);
             appRecord.getProcessRecords().add(processRecord);
         }
+
+        FreezerHandler.sendFreezeMessage(appRecord, 3000);
     }
 
     public static void removeProcessRecord(String name, int uid) {
@@ -27,6 +32,8 @@ public class ProcessService {
                 ProcessRecord processRecord = PROCESS_NAME_MAP.computeIfAbsent(name, k -> new ConcurrentHashMap<>()).remove(uid);
                 if (processRecord == null)
                     return;
+                if (processRecord.isFrozen())
+                    FrozenRW.thaw(processRecord.getRunningUid(), processRecord.getPid());
                 AppRecord appRecord = processRecord.getAppRecord();
                 if (appRecord == null)
                     return;

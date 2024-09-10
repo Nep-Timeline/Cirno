@@ -22,6 +22,7 @@ public class FreezerService {
             processRecord.setFrozen(true);
         }
         ForceAppStandbyListener.removeAlarmsForUid(appRecord);
+        NetworkManagementService.socketDestroy(appRecord);
         appRecord.setFrozen(true);
     }
 
