@@ -12,6 +12,8 @@ import nep.timeline.cirno.hooks.android.binder.SamsungBinderTransHook;
 import nep.timeline.cirno.hooks.android.broadcast.BroadcastDeliveryHook;
 import nep.timeline.cirno.hooks.android.broadcast.BroadcastSkipHook;
 import nep.timeline.cirno.hooks.android.input.InputMethodManagerService;
+import nep.timeline.cirno.hooks.android.location.ListenerRegisterHook;
+import nep.timeline.cirno.hooks.android.location.ListenerUnregisterHook;
 import nep.timeline.cirno.hooks.android.network.NetworkManagerHook;
 import nep.timeline.cirno.hooks.android.process.ProcessAddHook;
 import nep.timeline.cirno.hooks.android.process.ProcessRemoveHook;
@@ -24,6 +26,9 @@ public class AndroidHooks {
         FileObserver fileObserver = new ConfigFileObserver();
         fileObserver.startWatching();
 
+        // Location
+        new ListenerRegisterHook(classLoader);
+        new ListenerUnregisterHook(classLoader);
         // InputMethod
         new InputMethodManagerService(classLoader);
         // Network

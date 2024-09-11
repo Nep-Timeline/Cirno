@@ -43,4 +43,8 @@ public class ActivityManagerService {
         PackageManager packageManager = context.getPackageManager();
         return packageManager.getPackagesForUid(uid);
     }
+
+    public static Object getPidsSelfLocked() {
+        return XposedHelpers.getObjectField(instance, "mPidsSelfLocked");
+    }
 }

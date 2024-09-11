@@ -3,6 +3,7 @@ package nep.timeline.cirno.services;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import de.robv.android.xposed.XposedHelpers;
 import nep.timeline.cirno.entity.AppRecord;
 import nep.timeline.cirno.threads.FreezerHandler;
 import nep.timeline.cirno.utils.FrozenRW;
@@ -58,5 +59,14 @@ public class ProcessService {
         if (map == null)
             return null;
         return map.get(uid);
+    }
+
+    public static ProcessRecord getProcessRecordByPid(int pid) {
+        ProcessRecord processRecord;
+        Object mPidsSelfLocked = ActivityManagerService.getPidsSelfLocked();
+        synchronized (mPidsSelfLocked) {
+            processRecord = getProcessRecord(XposedHelpers.callMethod(mPidsSelfLocked, "get", pid));
+        }
+        return processRecord;
     }
 }
