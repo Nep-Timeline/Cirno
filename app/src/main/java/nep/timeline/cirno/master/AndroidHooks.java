@@ -6,6 +6,9 @@ import nep.timeline.cirno.configs.ConfigFileObserver;
 import nep.timeline.cirno.hooks.android.activity.ActivityManagerServiceHook;
 import nep.timeline.cirno.hooks.android.activity.ActivityStatsHook;
 import nep.timeline.cirno.hooks.android.alarms.AlarmManagerService;
+import nep.timeline.cirno.hooks.android.anr.ANRErrorStateHook;
+import nep.timeline.cirno.hooks.android.anr.ANRHelperHooks;
+import nep.timeline.cirno.hooks.android.anr.ANRHook;
 import nep.timeline.cirno.hooks.android.audio.AudioStateHook;
 import nep.timeline.cirno.hooks.android.audio.PlayerBanHook;
 import nep.timeline.cirno.hooks.android.audio.SendMediaButtonHook;
@@ -31,6 +34,10 @@ public class AndroidHooks {
         FileObserver fileObserver = new ConfigFileObserver();
         fileObserver.startWatching();
 
+        // ANR
+        new ANRHook(classLoader);
+        new ANRErrorStateHook(classLoader);
+        new ANRHelperHooks(classLoader);
         // Signal
         new SendSignalHook(classLoader);
         new SendSignalQuietHook(classLoader);

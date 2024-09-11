@@ -48,7 +48,7 @@ public class InputMethodManagerService extends MethodHook {
                 Object settings;
 
                 int userId;
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                     userId = XposedHelpers.getIntField(param.thisObject, "mCurrentUserId");
                     settings = XposedHelpers.callStaticMethod(XposedHelpers.findClassIfExists("com.android.server.inputmethod.InputMethodSettingsRepository", classLoader), "get", userId);
                 }
