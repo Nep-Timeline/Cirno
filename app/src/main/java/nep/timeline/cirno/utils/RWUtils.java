@@ -32,9 +32,9 @@ public class RWUtils {
     public static boolean writeFrozen(String path, int value) {
         try (PrintWriter writer = new PrintWriter(path)) {
             writer.write(Integer.toString(value));
-            writer.flush();
             return true;
         } catch (FileNotFoundException ignored) {
+            Log.e(path + " | 文件不存在, 此进程可能已死亡, 或者你的设备不支持cgroup v2");
             return false;
         }
     }

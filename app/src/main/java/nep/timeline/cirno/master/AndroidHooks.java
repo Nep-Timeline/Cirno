@@ -6,6 +6,9 @@ import nep.timeline.cirno.configs.ConfigFileObserver;
 import nep.timeline.cirno.hooks.android.activity.ActivityManagerServiceHook;
 import nep.timeline.cirno.hooks.android.activity.ActivityStatsHook;
 import nep.timeline.cirno.hooks.android.alarms.AlarmManagerService;
+import nep.timeline.cirno.hooks.android.audio.AudioStateHook;
+import nep.timeline.cirno.hooks.android.audio.PlayerBanHook;
+import nep.timeline.cirno.hooks.android.audio.SendMediaButtonHook;
 import nep.timeline.cirno.hooks.android.binder.HansKernelUnfreezeHook;
 import nep.timeline.cirno.hooks.android.binder.MilletBinderTransHook;
 import nep.timeline.cirno.hooks.android.binder.SamsungBinderTransHook;
@@ -17,6 +20,8 @@ import nep.timeline.cirno.hooks.android.location.ListenerUnregisterHook;
 import nep.timeline.cirno.hooks.android.network.NetworkManagerHook;
 import nep.timeline.cirno.hooks.android.process.ProcessAddHook;
 import nep.timeline.cirno.hooks.android.process.ProcessRemoveHook;
+import nep.timeline.cirno.hooks.android.signal.SendSignalHook;
+import nep.timeline.cirno.hooks.android.signal.SendSignalQuietHook;
 import nep.timeline.cirno.hooks.android.wakelock.WakeLockHook;
 import nep.timeline.cirno.services.BinderService;
 
@@ -26,6 +31,13 @@ public class AndroidHooks {
         FileObserver fileObserver = new ConfigFileObserver();
         fileObserver.startWatching();
 
+        // Signal
+        new SendSignalHook(classLoader);
+        new SendSignalQuietHook(classLoader);
+        // Audio
+        new AudioStateHook(classLoader);
+        new PlayerBanHook(classLoader);
+        new SendMediaButtonHook(classLoader);
         // Location
         new ListenerRegisterHook(classLoader);
         new ListenerUnregisterHook(classLoader);

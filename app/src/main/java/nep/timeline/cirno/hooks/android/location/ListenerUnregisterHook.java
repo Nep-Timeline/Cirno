@@ -56,7 +56,7 @@ public class ListenerUnregisterHook extends MethodHook {
 
                     Set<IBinder> set = appRecord.getAppState().getLocationListeners();
                     if (set.remove(listener.asBinder()))
-                        LocationHandler.callWithBinder(appRecord, set);
+                        LocationHandler.call(appRecord, set);
                 });
             }
         };

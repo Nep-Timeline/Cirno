@@ -10,7 +10,7 @@ import nep.timeline.cirno.services.FreezerService;
 import nep.timeline.cirno.threads.FreezerHandler;
 
 public class LocationHandler {
-    public static void callWithBinder(AppRecord appRecord, Set<IBinder> set) {
+    public static void call(AppRecord appRecord, Set<IBinder> set) {
         if (appRecord.isSystem())
             return;
 

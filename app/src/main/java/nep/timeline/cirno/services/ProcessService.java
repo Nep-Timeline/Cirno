@@ -27,6 +27,10 @@ public class ProcessService {
         FreezerHandler.sendFreezeMessage(appRecord, 3000);
     }
 
+    public static void removeProcessRecord(ProcessRecord processRecord) {
+        removeProcessRecord(processRecord.getProcessName(), processRecord.getRunningUid());
+    }
+
     public static void removeProcessRecord(String name, int uid) {
         synchronized (lock) {
             if (PROCESS_NAME_MAP.containsKey(name)) {

@@ -33,8 +33,6 @@ public class InputMethodManagerService extends MethodHook {
 
     @Override
     public Object[] getTargetParam() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU)
-            return new Object[] { String.class, int.class, int.class };
         return new Object[] { String.class, int.class };
     }
 

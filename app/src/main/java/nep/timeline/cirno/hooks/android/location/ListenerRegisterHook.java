@@ -59,7 +59,7 @@ public class ListenerRegisterHook extends MethodHook {
 
                     Set<IBinder> set = appRecord.getAppState().getLocationListeners();
                     if (set.add(listener.asBinder()))
-                        LocationHandler.callWithBinder(appRecord, set);
+                        LocationHandler.call(appRecord, set);
                 });
             }
         };
