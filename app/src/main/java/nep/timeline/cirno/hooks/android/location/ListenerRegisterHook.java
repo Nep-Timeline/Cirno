@@ -35,7 +35,6 @@ public class ListenerRegisterHook extends MethodHook {
     @Override
     public Object[] getTargetParam() {
         return new Object[] { String.class, LocationRequest.class, "android.location.ILocationListener", String.class, String.class, String.class };
-
     }
 
     @Override

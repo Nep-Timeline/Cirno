@@ -47,7 +47,17 @@ public class InputMethodManagerService extends MethodHook {
                 if (id == null)
                     return;
 
-                Object settings = XposedHelpers.getObjectField(param.thisObject, "mSettings");
+                Object settings;
+
+                int userId;
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.TIRAMISU) {
+                    userId = XposedHelpers.getIntField(param.thisObject, "mCurrentUserId");
+                    settings = XposedHelpers.callStaticMethod(XposedHelpers.findClassIfExists("com.android.server.inputmethod.InputMethodSettingsRepository", classLoader), "get", userId);
+                }
+                else {
+                    settings = XposedHelpers.getObjectField(param.thisObject, "mSettings");
+                    userId = (settings == null) ? ActivityManagerService.getCurrentOrTargetUserId() : (int) XposedHelpers.callMethod(settings, "getUserId");
+                }
 
                 synchronized (InputMethodData.class) {
                     if (InputMethodData.instance == null) {
@@ -75,7 +85,7 @@ public class InputMethodManagerService extends MethodHook {
 
                     if (inputMethodInfo != null && !inputMethodInfo.equals(InputMethodData.currentInputMethodInfo)) {
                         InputMethodData.currentInputMethodInfo = inputMethodInfo;
-                        AppRecord appRecord = AppService.get(inputMethodInfo.getPackageName(), (settings == null) ? ActivityManagerService.getCurrentOrTargetUserId() : (int) XposedHelpers.callMethod(settings, "getUserId"));
+                        AppRecord appRecord = AppService.get(inputMethodInfo.getPackageName(), userId);
                         if (appRecord != InputMethodData.currentInputMethodApp) {
                             AppRecord oldApp = InputMethodData.currentInputMethodApp;
                             InputMethodData.currentInputMethodApp = appRecord;
