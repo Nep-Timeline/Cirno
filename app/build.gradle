@@ -33,6 +33,11 @@ android {
         }
     }
 
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
+    }
+
     buildFeatures {
         aidl true
         buildConfig true
@@ -58,7 +63,6 @@ android {
     android.applicationVariants.configureEach {
         variant ->
             variant.outputs.configureEach {
-                //这里修改apk文件名
                 outputFileName = "Cirno-${variant.versionName}(${versionCode}).apk"
             }
     }
