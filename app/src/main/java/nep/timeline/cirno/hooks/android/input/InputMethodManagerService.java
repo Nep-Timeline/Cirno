@@ -54,7 +54,7 @@ public class InputMethodManagerService extends MethodHook {
                 }
                 else {
                     settings = XposedHelpers.getObjectField(param.thisObject, "mSettings");
-                    userId = (settings == null) ? ActivityManagerService.getCurrentOrTargetUserId() : (int) XposedHelpers.callMethod(settings, "getUserId");
+                    userId = (settings == null) ? ActivityManagerService.getCurrentOrTargetUserId() : XposedHelpers.getIntField(settings, "mCurrentUserId");
                 }
 
                 synchronized (InputMethodData.class) {
