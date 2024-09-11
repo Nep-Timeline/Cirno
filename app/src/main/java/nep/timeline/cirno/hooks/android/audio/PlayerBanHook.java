@@ -10,6 +10,7 @@ import nep.timeline.cirno.framework.AbstractMethodHook;
 import nep.timeline.cirno.framework.MethodHook;
 import nep.timeline.cirno.handlers.AudioHandler;
 import nep.timeline.cirno.services.AppService;
+import nep.timeline.cirno.threads.Handlers;
 import nep.timeline.cirno.virtuals.AudioPlaybackConfigurationReflect;
 
 public class PlayerBanHook extends MethodHook {
@@ -44,17 +45,19 @@ public class PlayerBanHook extends MethodHook {
 
                     AudioPlaybackConfigurationReflect reflect = new AudioPlaybackConfigurationReflect((AudioPlaybackConfiguration) configuration);
 
-                    List<AppRecord> appRecords = AppService.getByUid(reflect.getClientUid());
-                    if (appRecords == null || appRecords.isEmpty())
-                        return;
+                    Handlers.audio.post(() -> {
+                        List<AppRecord> appRecords = AppService.getByUid(reflect.getClientUid());
+                        if (appRecords == null || appRecords.isEmpty())
+                            return;
 
-                    for (AppRecord appRecord : appRecords) {
-                        if (appRecord == null)
-                            continue;
+                        for (AppRecord appRecord : appRecords) {
+                            if (appRecord == null)
+                                continue;
 
-                        int interfaceId = reflect.getPlayerInterfaceId();
-                        AudioHandler.call(appRecord, AudioHandler.PLAYER_STATE_PAUSED, interfaceId);
-                    }
+                            int interfaceId = reflect.getPlayerInterfaceId();
+                            AudioHandler.call(appRecord, AudioHandler.PLAYER_STATE_PAUSED, interfaceId);
+                        }
+                    });
                 }
             }
         };

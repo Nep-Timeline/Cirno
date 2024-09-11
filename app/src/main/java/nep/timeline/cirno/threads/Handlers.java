@@ -9,6 +9,9 @@ import nep.timeline.cirno.GlobalVars;
 import nep.timeline.cirno.log.Log;
 
 public class Handlers {
+    public static final Handler alarms = makeHandler("Alarms");
+    public static final Handler network = makeHandler("Network");
+    public static final Handler audio = makeHandler("Audio");
     public static final Handler location = makeHandler("Location");
     public static final Handler rekernel = makeHandler("ReKernel");
     public static final Handler log = makeHandlerBackground("Log");

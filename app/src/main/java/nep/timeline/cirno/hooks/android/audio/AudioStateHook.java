@@ -10,6 +10,7 @@ import nep.timeline.cirno.framework.AbstractMethodHook;
 import nep.timeline.cirno.framework.MethodHook;
 import nep.timeline.cirno.handlers.AudioHandler;
 import nep.timeline.cirno.services.AppService;
+import nep.timeline.cirno.threads.Handlers;
 import nep.timeline.cirno.virtuals.AudioPlaybackConfigurationReflect;
 
 public class AudioStateHook extends MethodHook {
@@ -44,17 +45,19 @@ public class AudioStateHook extends MethodHook {
                 if (AudioHandler.LISTEN_EVENT.contains(event)) {
                     AudioPlaybackConfigurationReflect reflect = new AudioPlaybackConfigurationReflect((AudioPlaybackConfiguration) param.thisObject);
 
-                    List<AppRecord> appRecords = AppService.getByUid(reflect.getClientUid());
-                    if (appRecords == null)
-                        return;
+                    Handlers.audio.post(() -> {
+                        List<AppRecord> appRecords = AppService.getByUid(reflect.getClientUid());
+                        if (appRecords == null)
+                            return;
 
-                    int interfaceId = reflect.getPlayerInterfaceId();
-                    for (AppRecord appRecord : appRecords) {
-                        if (appRecord == null)
-                            continue;
+                        int interfaceId = reflect.getPlayerInterfaceId();
+                        for (AppRecord appRecord : appRecords) {
+                            if (appRecord == null)
+                                continue;
 
-                        AudioHandler.call(appRecord, event, interfaceId);
-                    }
+                            AudioHandler.call(appRecord, event, interfaceId);
+                        }
+                    });
                 }
             }
         };

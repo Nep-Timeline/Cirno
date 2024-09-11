@@ -3,6 +3,7 @@ package nep.timeline.cirno.services;
 import java.util.List;
 
 import nep.timeline.cirno.entity.AppRecord;
+import nep.timeline.cirno.threads.Handlers;
 import nep.timeline.cirno.utils.ForceAppStandbyListener;
 import nep.timeline.cirno.virtuals.ProcessRecord;
 import nep.timeline.cirno.log.Log;
@@ -21,11 +22,11 @@ public class FreezerService {
             FrozenRW.frozen(processRecord.getRunningUid(), processRecord.getPid());
             processRecord.setFrozen(true);
         }
-        ForceAppStandbyListener.removeAlarmsForUid(appRecord);
-        NetworkManagementService.socketDestroy(appRecord);
+
+        Handlers.alarms.post(() -> ForceAppStandbyListener.removeAlarmsForUid(appRecord));
+        Handlers.network.post(() -> NetworkManagementService.socketDestroy(appRecord));
         appRecord.setFrozen(true);
     }
-
 
     public static void thaw(AppRecord appRecord) {
         FreezerHandler.removeAppMessage(appRecord);
