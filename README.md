@@ -4,6 +4,9 @@
 </div>
    
 ----
+[![Release](https://img.shields.io/github/release/Nep-Timeline/Cirno.svg)](https://github.com/Nep-Timeline/Cirno/releases/latest)
+[![CI_Build](https://github.com/Nep-Timeline/Cirno/actions/workflows/android.yml/badge.svg)](https://github.com/Nep-Timeline/Cirno/actions/workflows/android.yml)
+
 Cirno 是一个运行在 Android 12+ 全平台的应用冻结器, 用于使后台应用完全不占用CPU资源来提高设备整体流畅度
 
 这个项目的名字来源于
