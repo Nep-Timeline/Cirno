@@ -9,6 +9,8 @@ import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import nep.timeline.cirno.GlobalVars;
 import nep.timeline.cirno.entity.AppRecord;
@@ -19,6 +21,7 @@ import nep.timeline.cirno.threads.Handlers;
 import nep.timeline.cirno.utils.StringUtils;
 
 public class BinderService {
+    private final static ExecutorService executorService = Executors.newSingleThreadExecutor();
     public static boolean received = false;
     private static boolean isRunning = false;
     private static final int NETLINK_UNIT_DEFAULT = 22;
@@ -28,37 +31,37 @@ public class BinderService {
         if (isRunning)
             return;
 
-        try {
-            int netlinkUnit;
-            int configNetlinkUnit = GlobalVars.globalSettings.netlinkUnit;
-            if (configNetlinkUnit >= NETLINK_UNIT_DEFAULT && configNetlinkUnit <= NETLINK_UNIT_MAX) {
-                netlinkUnit = configNetlinkUnit;
-            } else {
-                File dir = new File("/proc/rekernel");
-                if (dir.exists()) {
-                    File[] files = dir.listFiles();
-                    if (files == null) {
-                        Log.e("找不到ReKernel单元");
-                        return;
-                    }
-                    File unitFile = files[0];
-                    netlinkUnit = StringUtils.StringToInteger(unitFile.getName());
-                } else netlinkUnit = NETLINK_UNIT_DEFAULT;
-            }
-
-            try (NetlinkClient netlinkClient = new NetlinkClient(classLoader, netlinkUnit)) {
-                if (!netlinkClient.getMDescriptor().valid()) {
-                    Log.e("无法连接至ReKernel服务器");
-                    return;
+        executorService.execute(() -> {
+            try {
+                int netlinkUnit;
+                int configNetlinkUnit = GlobalVars.globalSettings.netlinkUnit;
+                if (configNetlinkUnit >= NETLINK_UNIT_DEFAULT && configNetlinkUnit <= NETLINK_UNIT_MAX) {
+                    netlinkUnit = configNetlinkUnit;
+                } else {
+                    File dir = new File("/proc/rekernel");
+                    if (dir.exists()) {
+                        File[] files = dir.listFiles();
+                        if (files == null) {
+                            Log.e("找不到ReKernel单元");
+                            return;
+                        }
+                        File unitFile = files[0];
+                        netlinkUnit = StringUtils.StringToInteger(unitFile.getName());
+                    } else netlinkUnit = NETLINK_UNIT_DEFAULT;
                 }
 
-                netlinkClient.bind((SocketAddress) new NetlinkSocketAddress(100).toInstance(classLoader));
+                try (NetlinkClient netlinkClient = new NetlinkClient(classLoader, netlinkUnit)) {
+                    if (!netlinkClient.getMDescriptor().valid()) {
+                        Log.e("无法连接至ReKernel服务器");
+                        return;
+                    }
 
-                isRunning = true;
+                    netlinkClient.bind((SocketAddress) new NetlinkSocketAddress(100).toInstance(classLoader));
 
-                Log.i("已连接至ReKernel, " + netlinkUnit + "#100");
+                    isRunning = true;
 
-                Handlers.rekernel.post(() -> {
+                    Log.i("已连接至ReKernel, " + netlinkUnit + "#100");
+
                     while (true) {
                         try {
                             ByteBuffer byteBuffer = netlinkClient.recvMessage();
@@ -68,24 +71,26 @@ public class BinderService {
                                     Log.i("成功接收到来自ReKernel的消息");
                                     received = true;
                                 }
-                                String type = StringUtils.getSubString(data, "type=", ",").trim();
-                                if (type.equals("Binder")) {
-                                    String bindertype = StringUtils.getSubString(data, "bindertype=", ",").trim();
-                                    int oneway = StringUtils.StringToInteger(StringUtils.getSubString(data, "oneway=", ","));
-                                    int targetUid = StringUtils.StringToInteger(StringUtils.getSubString(data, "target=", ";"));
-                                    if (oneway == 1 && !bindertype.equals("free_buffer_full"))
-                                        return;
+                                Handlers.rekernel.post(() -> {
+                                    String type = StringUtils.getSubString(data, "type=", ",").trim();
+                                    if (type.equals("Binder")) {
+                                        String bindertype = StringUtils.getSubString(data, "bindertype=", ",").trim();
+                                        int oneway = StringUtils.StringToInteger(StringUtils.getSubString(data, "oneway=", ","));
+                                        int targetUid = StringUtils.StringToInteger(StringUtils.getSubString(data, "target=", ";"));
+                                        if (oneway == 1 && !bindertype.equals("free_buffer_full"))
+                                            return;
 
-                                    List<AppRecord> appRecords = AppService.getByUid(targetUid);
-                                    if (appRecords == null || appRecords.isEmpty())
-                                        return;
-                                    for (AppRecord appRecord : appRecords) {
-                                        if (appRecord == null)
-                                            continue;
+                                        List<AppRecord> appRecords = AppService.getByUid(targetUid);
+                                        if (appRecords == null || appRecords.isEmpty())
+                                            return;
+                                        for (AppRecord appRecord : appRecords) {
+                                            if (appRecord == null)
+                                                continue;
 
-                                        FreezerService.temporaryUnfreezeIfNeed(appRecord, "内核Binder(" + (oneway == 1 ? "ASYNC" : "SYNC") + "), 类型: " + bindertype, 3000);
+                                            FreezerService.temporaryUnfreezeIfNeed(appRecord, "内核Binder(" + (oneway == 1 ? "ASYNC" : "SYNC") + "), 类型: " + bindertype, 3000);
+                                        }
                                     }
-                                }
+                                });
                             }
                         } catch (ErrnoException | InterruptedIOException |
                                  NumberFormatException ignored) {
@@ -94,10 +99,12 @@ public class BinderService {
                             Log.e("ReKernel", e);
                         }
                     }
-                });
+                }
+            } catch (ErrnoException | IOException e) {
+                Log.e("无法连接至ReKernel服务器");
+            } catch (Throwable throwable) {
+                Log.e("ReKernel", throwable);
             }
-        } catch (ErrnoException | IOException e) {
-            Log.e("无法连接至ReKernel服务器");
-        }
+        });
     }
 }
