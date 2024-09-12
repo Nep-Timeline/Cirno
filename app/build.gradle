@@ -7,13 +7,13 @@ android {
     namespace = 'nep.timeline.cirno'
     compileSdk 35
 
-    ndkVersion "27.0.12077973"
+    ndkVersion "26.3.11579264"
 
     defaultConfig {
         applicationId 'nep.timeline.cirno'
         minSdk 31
         targetSdk 35
-        versionCode 1
+        versionCode 2
         versionName 'Baka'
 
         externalNativeBuild {
