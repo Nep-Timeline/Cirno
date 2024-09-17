@@ -13,7 +13,7 @@ android {
         applicationId 'nep.timeline.cirno'
         minSdk 31
         targetSdk 35
-        versionCode 2
+        versionCode 3
         versionName 'Baka'
 
         externalNativeBuild {

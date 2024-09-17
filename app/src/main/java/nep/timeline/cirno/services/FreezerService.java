@@ -31,7 +31,7 @@ public class FreezerService {
     public static void thaw(AppRecord appRecord) {
         FreezerHandler.removeAppMessage(appRecord);
 
-        if (!appRecord.isFrozen() || appRecord.isSystem())
+        if (!appRecord.isFrozen())
             return;
 
         for (ProcessRecord processRecord : appRecord.getProcessRecords()) {

@@ -40,6 +40,7 @@ public class InputMethodManagerService extends MethodHook {
     public XC_MethodHook getTargetHook() {
         return new AbstractMethodHook() {
             @Override
+            @SuppressWarnings("unchecked")
             protected void beforeMethod(MethodHookParam param) {
                 String id = (String) param.args[0];
                 if (id == null)
